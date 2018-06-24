@@ -1,0 +1,42 @@
+﻿body {
+}
+
+.mainDiv {
+    border: 1px solid black;
+    padding: 20px;
+}
+
+.link-list-users {
+    text-align:center;
+    font-size: 16px;
+    font-style:italic;
+    font-weight:700;
+}
+
+.labelRegistrForm {
+    display: inline-block;
+    width: 150px;
+    text-align:right;
+}
+
+.div-btn-registr {
+    width:auto;
+    height:50px;
+    padding-left: 105px;
+}
+
+.txb-registr-new-user {
+    color: lightgray;
+    width:150px;
+}
+
+.list-users {
+    display:inline-block;
+}
+
+
+.class-buel-list {
+    line-height:26px;
+}
+
+
