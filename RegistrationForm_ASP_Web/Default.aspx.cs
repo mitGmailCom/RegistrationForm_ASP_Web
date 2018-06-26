@@ -18,10 +18,9 @@ namespace RegistrationForm_ASP_Web
         string recordPassword;
         string recordCity;
         string recordRole;
-        bool flagChangeProfile;
+        string recordListRole;
 
         protected void Page_Load(object sender, EventArgs e)
-
         {
             List<Role> ListStringRole = new List<Role>();
             List<ListItem> ListItems = new List<ListItem>();
@@ -36,20 +35,52 @@ namespace RegistrationForm_ASP_Web
                 recordPassword = Request.QueryString["recordPassword"];
                 recordCity = Request.QueryString["recordCity"];
                 recordRole = Request.QueryString["recordRole"];
+                recordListRole = Request.QueryString["recordListRole"];
             }
 
 
-            // заполнение массива ListStringRole
-            if (ListStringRole.Count == 0)
+            if (PreviousPage != null)
             {
-                 ListStringRole.AddRange(new Role[] { new Role("guest"), new Role("admin"), new Role("user") });
-
-                 for (int i = 0; i < ListStringRole.Count; i++)
-                 {
-                     ListItems.Add((new ListItem((ListStringRole[i] as Role).Name)));
-                 }
+                ManageRoles prevPage = new ManageRoles();
+                if (ListStringRole.Count == 0)
+                {
+                    ListStringRole = prevPage.ListOfRolesChanged;
+                }
+                for (int i = 0; i < ListStringRole.Count; i++)
+                {
+                    ListItems.Add((new ListItem((ListStringRole[i] as Role).Name)));
+                }
             }
-           
+
+
+            //заполнение массива ListStringRole
+            if (ListStringRole.Count == 0 && recordRole == null)
+            {
+                ListStringRole.AddRange(new Role[] { new Role("guest"), new Role("admin"), new Role("user") });
+
+                for (int i = 0; i < ListStringRole.Count; i++)
+                {
+                    ListItems.Add((new ListItem((ListStringRole[i] as Role).Name)));
+                }
+            }
+
+
+            if (ListStringRole.Count == 0 && recordRole != null)
+            {
+                ManageRoles prevPage = new ManageRoles();
+                if (ListStringRole.Count == 0)
+                {
+                    string[] tempMasRoles = recordListRole.Split();
+                    for (int i = 0; i < tempMasRoles.Length; i++)
+                    {
+                        ListStringRole.Add(new Role(tempMasRoles[i]));
+                    }
+                }
+                for (int i = 0; i < ListStringRole.Count; i++)
+                {
+                    ListItems.Add((new ListItem((ListStringRole[i] as Role).Name)));
+                }
+            }
 
             drdlRoleUser.Items.AddRange(ListItems.ToArray());
 
@@ -61,11 +92,13 @@ namespace RegistrationForm_ASP_Web
                 txbCityUser.Text = recordCity;
                 txbFirstnameUser.Text = recordFirstname;
                 txbLastnameUser.Text = recordLastname;
+                //txbPasswordUser.TextMode = TextBoxMode.SingleLine;
                 txbPasswordUser.Text = recordPassword;
+                //txbPasswordUser.Attributes["onfocus"] = $"alert({recordPassword});";
+                txbPasswordUser.ToolTip = $"{recordPassword}";
                 txbEmailUser.Text = recordEmail;
                 drdlRoleUser.ClearSelection();
                 drdlRoleUser.Items.FindByText(recordRole).Selected = true;
-                flagChangeProfile = true;
                 HiddenField1.Value = recordId;
             }
         }
@@ -107,12 +140,6 @@ namespace RegistrationForm_ASP_Web
             get { return recordId; }
         }
 
-        public bool FlagIsChangeingProfile
-        {
-            get { return flagChangeProfile; }
-            set { flagChangeProfile = value; }
-        }
-
         public string HiddenValue
         {
             get { return HiddenField1.Value; }
@@ -121,9 +148,6 @@ namespace RegistrationForm_ASP_Web
 
         protected void btnRegister_Click(object sender, EventArgs e)
         {
-
         }
-
-        
     }
 }

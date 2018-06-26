@@ -39,4 +39,11 @@
     line-height:26px;
 }
 
+.colManageClass {
+    display:block;
+    text-align:center;
+}
 
+.class-table {
+    text-align: center;
+}

@@ -12,9 +12,7 @@ namespace RegistrationForm_ASP_Web
         private static List<UserClass> ListOfUsersPageListUsers = new List<UserClass>();
         private static List<Role> ListOfRolePageListUsers = new List<Role>();
         private static List<UserWithRole> ListOfUserWithRole = new List<UserWithRole>();
-        //static List<UserClass> ListOfUsers = new List<UserClass>() { new UserClass(1, "ivanov@gmail.com", "11111", "Ivan", "Ivanov"), new UserClass(2, "petrov@gmail.com", "11111", "Petr", "Petrovich"), new UserClass(3, "sidorov@gmail.com", "11111", "Semen", "Semenovich") };
-        //static CheckBoxList checkBxL = new CheckBoxList();
-
+        private static Role currentRole = new Role();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -36,10 +34,8 @@ namespace RegistrationForm_ASP_Web
                 if (PreviousPage is Default)
                 {
                     Default PageWithRegistrUser = PreviousPage as Default;
-                    bool ff = PageWithRegistrUser.FlagIsChangeingProfile;
                     if (PageWithRegistrUser != null)
                     {
-                        
                         if (PageWithRegistrUser.HiddenValue == "null")
                         {
                             UserClass newUser = new UserClass();
@@ -51,11 +47,7 @@ namespace RegistrationForm_ASP_Web
                             newUser.City = PageWithRegistrUser.City;
                             ListOfUsersPageListUsers.Add(newUser);
 
-                            Role newRoleUser = new Role();
-                            newRoleUser.Name = PageWithRegistrUser.RoleUsr;
-                            ListOfRolePageListUsers.Add(newRoleUser);
-
-                            UserWithRole CompleteUser = new UserWithRole(newUser, newRoleUser);
+                            UserWithRole CompleteUser = new UserWithRole(newUser, new Role(PageWithRegistrUser.RoleUsr));
                             ListOfUserWithRole.Add(CompleteUser);
                         }
 
@@ -70,16 +62,11 @@ namespace RegistrationForm_ASP_Web
                             newUser.City = PageWithRegistrUser.City;
                             ListOfUsersPageListUsers[Convert.ToInt32(PageWithRegistrUser.HiddenValue)] = newUser;
 
-                            Role newRoleUser = new Role();
-                            newRoleUser.Name = PageWithRegistrUser.RoleUsr;
-                            ListOfRolePageListUsers[Convert.ToInt32(PageWithRegistrUser.HiddenValue)] = newRoleUser;
-
-                            UserWithRole CompleteUser = new UserWithRole(newUser, newRoleUser);
+                          
+                            UserWithRole CompleteUser = new UserWithRole(newUser, new Role(PageWithRegistrUser.RoleUsr));
                             ListOfUserWithRole[Convert.ToInt32(PageWithRegistrUser.HiddenValue)] = CompleteUser;
-                            PageWithRegistrUser.FlagIsChangeingProfile = false;
                             PageWithRegistrUser.HiddenValue = "null";
                         }
-
 
 
                         CheckBoxListUsers.Items.Clear();
@@ -103,30 +90,12 @@ namespace RegistrationForm_ASP_Web
                 {
                     CheckBoxListUsers.Items.Add(ListOfUsersPageListUsers[i].Email.ToString());
 
-                    //LinkButton hyperlinkBtn = new LinkButton();
-                    //hyperlinkBtn.ID = "HLBtn" + $"{ListOfUsers[i].Email}";
-                    //hyperlinkBtn.Text = "Изменить";
-                    //hyperlinkBtn.Click += HyperlinkBtn_Click;
-                    ////hyperlinkBtn.PostBackUrl = "~/Default.aspx.cs";
-                    //this.form1.Controls.Add(hyperlinkBtn);
-                    //tableRow_0Col_2.Controls.Add(hyperlinkBtn);
-                    //tableRow_0Col_2.Controls.Add();
                     ListItem one = new ListItem();
                     one.Text = "Изменить";
                     BulletedList1.Items.Add(one);
-
-                    //this.form1.Controls.Add(hyperlink);
                 }
             }
         }
-
-        //private void HyperlinkBtn_Click(object sender, EventArgs e)
-        //{
-        //    LinkButton templBtn = new LinkButton();
-        //    templBtn = sender as LinkButton;
-        //    string recordEmail =  templBtn.ID.Substring(5);
-        //    Response.Redirect("Default.aspx?recordEmail=" + recordEmail.ToString());
-        //}
 
 
         protected void BulletedList1_Click(object sender, BulletedListEventArgs e)
@@ -149,12 +118,24 @@ namespace RegistrationForm_ASP_Web
                 recordLastname = ListOfUsersPageListUsers[res].LastName;
                 recordEmail = ListOfUsersPageListUsers[res].Email;
                 recordPassword = ListOfUsersPageListUsers[res].Password;
-                recordRole = ListOfRolePageListUsers[res].Name;
+                recordRole = ListOfUserWithRole[res].Role_UserWithRole.Name;
                 recordCity = ListOfUsersPageListUsers[res].City;
+
+                string tt = null;
+                for (int i = 0; i < ListOfRolePageListUsers.Count; i++)
+                {
+                    if (i == ListOfRolePageListUsers.Count-1)
+                    {
+                        tt += ListOfRolePageListUsers[i].Name;
+                        break;
+                    }
+                    tt += ListOfRolePageListUsers[i].Name + " ";
+                }
+
                 Response.Redirect("Default.aspx?recordId=" + recordId.ToString() + "&" +
                     "recordFirstname=" + recordFirstname + "&" + "recordLastname=" + recordLastname + "&" +
                     "recordEmail=" + recordEmail + "&" + "recordPassword=" + recordPassword + "&" +
-                    "recordRole=" + recordRole + "&" + "recordCity=" + recordCity);
+                    "recordRole=" + recordRole + "&" + "recordCity=" + recordCity + "&" + "recordListRole=" + tt);
             }
 
             if (!result)
@@ -162,8 +143,6 @@ namespace RegistrationForm_ASP_Web
                 Response.Redirect("Default.aspx?recordId=" + recordId.ToString());
             }
         }
-
-
 
 
 
@@ -192,6 +171,43 @@ namespace RegistrationForm_ASP_Web
             }
         }
 
-        
+        protected void CheckBoxListUsers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (CheckBoxListUsers.SelectedItem != null)
+                btnDelUsers.Enabled = true;
+            if (CheckBoxListUsers.SelectedItem == null)
+                btnDelUsers.Enabled = false;
+
+        }
+
+
+        public List<Role> ListRolesFormPgListUsers
+        {
+            get
+            {
+                return ListOfRolePageListUsers;
+            }
+            set
+            {
+                ListRolesFormPgListUsers = value;
+            }
+        }
+
+        public List<UserWithRole> ListUsersWithRolesFormPgListUsers
+        {
+            get
+            {
+                return ListOfUserWithRole;
+            }
+            set
+            {
+                ListOfUserWithRole = value;
+            }
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+        }
     }
+
 }

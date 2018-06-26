@@ -19,7 +19,10 @@ namespace RegistrationForm_ASP_Web
             UserRoleObject = usrRoleObj;
         }
 
-        
+        public Role Role_UserWithRole
+        {
+            get { return UserRoleObject; }
+        }
     }
 
    

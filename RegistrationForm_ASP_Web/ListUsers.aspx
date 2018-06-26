@@ -14,7 +14,7 @@
         <asp:Table ID="Table1" runat="server">
             <asp:TableRow ID="tableRow_0">
                 <asp:TableCell>
-                    <asp:CheckBoxList ID="CheckBoxListUsers" SelectionMode="Multiple" runat="server" ></asp:CheckBoxList>
+                    <asp:CheckBoxList ID="CheckBoxListUsers" SelectionMode="Multiple" AutoPostBack="true" OnSelectedIndexChanged="CheckBoxListUsers_SelectedIndexChanged" runat="server" ></asp:CheckBoxList>
                 </asp:TableCell>
                 
                  <asp:TableCell ID="tableRow_0Col_2">
@@ -25,16 +25,22 @@
                  </asp:TableCell>
         
         <%--<br /><br />--%>
-        
-        
             </asp:TableRow>
             <asp:TableRow>
                 <asp:TableCell>
-                    <asp:Button ID="btnDelUsers" runat="server" Text="Удалить" OnClick="DelUsers_Click" />
+                    <asp:Button ID="btnDelUsers" runat="server" Text="Удалить" Enabled="false" OnClick="DelUsers_Click" />
                 </asp:TableCell>
                 <asp:TableCell>
                     <asp:Button ID="btnLinkToRegistrFromListUsers" runat="server" Text="Регистрация" PostBackUrl="~/Default.aspx" />
                 </asp:TableCell>
+            </asp:TableRow>
+            <asp:TableRow>
+                <asp:TableCell ColumnSpan="2">
+                    <asp:Button ID="btnToPageManageRole" runat="server" PostBackUrl="~/ManageRoles.aspx" Text="Управление Ролями" />
+                </asp:TableCell>
+                <asp:TableCell>
+                </asp:TableCell>
+              
             </asp:TableRow>
             
         
