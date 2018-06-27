@@ -10,11 +10,8 @@
 <body>
     <form id="form1" runat="server">
     <div>
-        <%--<asp:LinkButton ID="LinkButton1" PostBackUrl="~/ListUsers.aspx" runat="server">ListUsers</asp:LinkButton>--%>
-        <%--<br />--%>
         <asp:LinkButton ID="LinkButton2" PostBackUrl="~/Default.aspx" runat="server">Default</asp:LinkButton>
         <br />
-        <asp:HiddenField ID="HiddenField1" runat="server" />
         <asp:HiddenField ID="HiddenFieldData" runat="server" />
         <asp:Table runat="server" class="class-table">
             <asp:TableRow ID="RowManage">

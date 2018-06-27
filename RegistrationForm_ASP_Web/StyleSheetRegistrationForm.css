@@ -47,3 +47,20 @@
 .class-table {
     text-align: center;
 }
+
+.class-input-text {
+    color: black;
+}
+
+.txb-registr-new-user:visited {
+     color: black;
+}
+
+.txb-registr-new-user:active {
+     color: black;
+}
+
+.txb-registr-new-user:focus {
+     color: black;
+}
+

@@ -16,34 +16,28 @@
                 <asp:TableCell>
                     <asp:CheckBoxList ID="CheckBoxListUsers" SelectionMode="Multiple" AutoPostBack="true" OnSelectedIndexChanged="CheckBoxListUsers_SelectedIndexChanged" runat="server" ></asp:CheckBoxList>
                 </asp:TableCell>
-                
                  <asp:TableCell ID="tableRow_0Col_2">
                      <div class="class-buel-list">
                         <asp:BulletedList BulletStyle="NotSet" DisplayMode="LinkButton" ID="BulletedList1" 
                             OnClick="BulletedList1_Click" runat="server"></asp:BulletedList>
                      </div>
                  </asp:TableCell>
-        
-        <%--<br /><br />--%>
             </asp:TableRow>
+
+            <asp:TableRow>
+                <asp:TableCell ColumnSpan="2" HorizontalAlign="Center">
+                    <asp:Button ID="btnDelUsers" runat="server" Width="150" Text="Удалить" Enabled="false" OnClick="DelUsers_Click" />
+                </asp:TableCell>
+            </asp:TableRow>
+            <asp:TableRow></asp:TableRow>
             <asp:TableRow>
                 <asp:TableCell>
-                    <asp:Button ID="btnDelUsers" runat="server" Text="Удалить" Enabled="false" OnClick="DelUsers_Click" />
+                    <asp:Button ID="btnToPageManageRole" runat="server" Width="150" PostBackUrl="~/ManageRoles.aspx" Text="Управление Ролями" />
                 </asp:TableCell>
                 <asp:TableCell>
-                    <asp:Button ID="btnLinkToRegistrFromListUsers" runat="server" Text="Регистрация" PostBackUrl="~/Default.aspx" />
+                    <asp:Button ID="btnLinkToRegistrFromListUsers" runat="server" Width="150" Text="Перейти к Регистрации" PostBackUrl="~/Default.aspx" />
                 </asp:TableCell>
             </asp:TableRow>
-            <asp:TableRow>
-                <asp:TableCell ColumnSpan="2">
-                    <asp:Button ID="btnToPageManageRole" runat="server" PostBackUrl="~/ManageRoles.aspx" Text="Управление Ролями" />
-                </asp:TableCell>
-                <asp:TableCell>
-                </asp:TableCell>
-              
-            </asp:TableRow>
-            
-        
         </asp:Table>
      </div>
     </form>

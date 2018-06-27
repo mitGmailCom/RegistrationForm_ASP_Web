@@ -16,19 +16,24 @@ namespace RegistrationForm_ASP_Web
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["ListOfUserWithRole"] != null)
+                ListOfUserWithRole = (List<UserWithRole>)Session["ListOfUserWithRole"];
+
             if (ListOfUsersPageListUsers.Count == 0)
                 ListOfUsersPageListUsers.AddRange(new UserClass[3] { new UserClass(1, "ivanov@gmail.com", "11111", "Ivan", "Ivanov", "Kiev"), new UserClass(2, "petrov@gmail.com", "11111", "Petr", "Petrovich", "Kiev"), new UserClass(3, "sidorov@gmail.com", "11111", "Semen", "Semenovich", "Kiev") });
             if (ListOfRolePageListUsers.Count == 0)
                 ListOfRolePageListUsers.AddRange(new Role[3] { new Role("guest"), new Role("admin"), new Role("user") });
             if (ListOfUserWithRole.Count == 0)
+            {
                 ListOfUserWithRole.AddRange(new UserWithRole[3] { new UserWithRole(ListOfUsersPageListUsers[0], ListOfRolePageListUsers[0]), new UserWithRole(ListOfUsersPageListUsers[1], ListOfRolePageListUsers[1]), new UserWithRole(ListOfUsersPageListUsers[2], ListOfRolePageListUsers[2]) });
-
+                Session["ListOfUserWithRole"] = ListOfUserWithRole;
+            }
+            
 
             if (PreviousPage != null)
             {
                 if (!PreviousPage.IsValid)
                     Response.Redirect(Request.UrlReferrer.AbsolutePath + "?err=true");
-
 
 
                 if (PreviousPage is Default)
@@ -49,8 +54,11 @@ namespace RegistrationForm_ASP_Web
 
                             UserWithRole CompleteUser = new UserWithRole(newUser, new Role(PageWithRegistrUser.RoleUsr));
                             ListOfUserWithRole.Add(CompleteUser);
+
+                            Session["ListOfUserWithRole"] = ListOfUserWithRole;
                         }
 
+                        // записываем новые значения при передаче данных через Button(используя свойства)
                         if (PageWithRegistrUser.HiddenValue != "null")
                         {
                             UserClass newUser = new UserClass();
@@ -61,14 +69,15 @@ namespace RegistrationForm_ASP_Web
                             newUser.Id = Convert.ToInt32(PageWithRegistrUser.HiddenValue);
                             newUser.City = PageWithRegistrUser.City;
                             ListOfUsersPageListUsers[Convert.ToInt32(PageWithRegistrUser.HiddenValue)] = newUser;
-
                           
                             UserWithRole CompleteUser = new UserWithRole(newUser, new Role(PageWithRegistrUser.RoleUsr));
                             ListOfUserWithRole[Convert.ToInt32(PageWithRegistrUser.HiddenValue)] = CompleteUser;
                             PageWithRegistrUser.HiddenValue = "null";
+
+                            Session["ListOfUserWithRole"] = ListOfUserWithRole;
                         }
 
-
+                        // заполнение выпадающего списка Пользователями
                         CheckBoxListUsers.Items.Clear();
                         for (int i = 0; i < ListOfUsersPageListUsers.Count; i++)
                         {
@@ -81,7 +90,6 @@ namespace RegistrationForm_ASP_Web
                 }
             }
 
-
             // Заполнение CheckBoxListUsers при загрузки страницы
             if (CheckBoxListUsers.Items.Count == 0)
             {
@@ -89,7 +97,6 @@ namespace RegistrationForm_ASP_Web
                 for (int i = 0; i < ListOfUsersPageListUsers.Count; i++)
                 {
                     CheckBoxListUsers.Items.Add(ListOfUsersPageListUsers[i].Email.ToString());
-
                     ListItem one = new ListItem();
                     one.Text = "Изменить";
                     BulletedList1.Items.Add(one);
@@ -145,7 +152,6 @@ namespace RegistrationForm_ASP_Web
         }
 
 
-
         protected void DelUsers_Click(object sender, EventArgs e)
         {
             List<ListItem> listItemsSelected = new List<ListItem>();
@@ -166,6 +172,8 @@ namespace RegistrationForm_ASP_Web
                         ListOfRolePageListUsers.RemoveAt(i);
                         ListOfUserWithRole.RemoveAt(i);
                         BulletedList1.Items.RemoveAt(i);
+
+                        Session["ListOfUserWithRole"] = ListOfUserWithRole;
                     }
                 }
             }
@@ -180,7 +188,6 @@ namespace RegistrationForm_ASP_Web
 
         }
 
-
         public List<Role> ListRolesFormPgListUsers
         {
             get
@@ -192,22 +199,5 @@ namespace RegistrationForm_ASP_Web
                 ListRolesFormPgListUsers = value;
             }
         }
-
-        public List<UserWithRole> ListUsersWithRolesFormPgListUsers
-        {
-            get
-            {
-                return ListOfUserWithRole;
-            }
-            set
-            {
-                ListOfUserWithRole = value;
-            }
-        }
-
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-        }
     }
-
 }

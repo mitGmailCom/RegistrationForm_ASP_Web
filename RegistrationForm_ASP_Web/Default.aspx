@@ -51,7 +51,6 @@
             <asp:Label class="labelRegistrForm" ID="lblRoleUser" runat="server" Text="Роль"></asp:Label>
             <asp:DropDownList ID="drdlRoleUser" runat="server"></asp:DropDownList>
 
-            <asp:Button ID="btnMaageRoles" runat="server" Text="Управление Ролями" PostBackUrl="~/ManageRoles.aspx" />
             <br /><br />
             <hr />
             <br /><br />

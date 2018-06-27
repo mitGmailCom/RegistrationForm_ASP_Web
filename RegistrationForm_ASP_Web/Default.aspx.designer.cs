@@ -229,15 +229,6 @@ namespace RegistrationForm_ASP_Web {
         protected global::System.Web.UI.WebControls.DropDownList drdlRoleUser;
         
         /// <summary>
-        /// btnMaageRoles элемент управления.
-        /// </summary>
-        /// <remarks>
-        /// Автоматически создаваемое поле.
-        /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnMaageRoles;
-        
-        /// <summary>
         /// btnRegister элемент управления.
         /// </summary>
         /// <remarks>

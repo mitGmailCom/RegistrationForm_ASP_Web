@@ -9,8 +9,6 @@ namespace RegistrationForm_ASP_Web
 {
     public partial class Default : System.Web.UI.Page
     {
-        //static List<Role> ListStringRole = new List<Role>();
-        //static List<ListItem> ListItems = new List<ListItem>();
         string recordId;
         string recordFirstname;
         string recordLastname;
@@ -24,7 +22,6 @@ namespace RegistrationForm_ASP_Web
         {
             List<Role> ListStringRole = new List<Role>();
             List<ListItem> ListItems = new List<ListItem>();
-
 
             if (Request.QueryString["recordId"] != null)
             {
@@ -41,10 +38,17 @@ namespace RegistrationForm_ASP_Web
 
             if (PreviousPage != null)
             {
-                ManageRoles prevPage = new ManageRoles();
                 if (ListStringRole.Count == 0)
                 {
-                    ListStringRole = prevPage.ListOfRolesChanged;
+                    if (PreviousPage is ManageRoles)
+                    {
+                        ManageRoles prevPage = new ManageRoles();
+                        ListStringRole = prevPage.ListOfRolesChanged;
+                    }
+                    if (PreviousPage is ListUsers)
+                    {
+                        ListStringRole = (List<Role>)Session["ListRoles"];
+                    }
                 }
                 for (int i = 0; i < ListStringRole.Count; i++)
                 {
@@ -52,8 +56,7 @@ namespace RegistrationForm_ASP_Web
                 }
             }
 
-
-            //заполнение массива ListStringRole
+            //заполнение массива ListStringRole при начальной загрузки
             if (ListStringRole.Count == 0 && recordRole == null)
             {
                 ListStringRole.AddRange(new Role[] { new Role("guest"), new Role("admin"), new Role("user") });
@@ -64,10 +67,9 @@ namespace RegistrationForm_ASP_Web
                 }
             }
 
-
+            // заполнение массива ListStringRole при передаче QueryString (ИЗМЕНЕНИЕ УЧ ЗАПИСИ)
             if (ListStringRole.Count == 0 && recordRole != null)
             {
-                ManageRoles prevPage = new ManageRoles();
                 if (ListStringRole.Count == 0)
                 {
                     string[] tempMasRoles = recordListRole.Split();
@@ -82,19 +84,20 @@ namespace RegistrationForm_ASP_Web
                 }
             }
 
+            // наполнения элементами выпадающего списка
             drdlRoleUser.Items.AddRange(ListItems.ToArray());
 
+            // проверка на ошибки QueryString
             if (Request.QueryString["err"] != null)
                 Page.Validate();
 
+            // заполнение элементов формы
             if (recordId != null)
             {
                 txbCityUser.Text = recordCity;
                 txbFirstnameUser.Text = recordFirstname;
                 txbLastnameUser.Text = recordLastname;
-                //txbPasswordUser.TextMode = TextBoxMode.SingleLine;
                 txbPasswordUser.Text = recordPassword;
-                //txbPasswordUser.Attributes["onfocus"] = $"alert({recordPassword});";
                 txbPasswordUser.ToolTip = $"{recordPassword}";
                 txbEmailUser.Text = recordEmail;
                 drdlRoleUser.ClearSelection();
@@ -102,7 +105,6 @@ namespace RegistrationForm_ASP_Web
                 HiddenField1.Value = recordId;
             }
         }
-
 
 
         public string FirstName
@@ -149,5 +151,12 @@ namespace RegistrationForm_ASP_Web
         protected void btnRegister_Click(object sender, EventArgs e)
         {
         }
+
+        protected void txbFirstnameUser_TextChanged(object sender, EventArgs e)
+        {
+            txbFirstnameUser.CssClass = "class-input-text";
+        }
+
+
     }
 }
